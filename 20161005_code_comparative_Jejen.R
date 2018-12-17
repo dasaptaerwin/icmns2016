@@ -9,6 +9,9 @@ jejen <- read.table("20161005_data_volcanic_Jejen.csv",
                     header=TRUE,
                     sep=",",) 
 
+install.packages("tidyverse")
+library("tidyverse")
+
 ################# old lines ################
 
 summary(jejen)
