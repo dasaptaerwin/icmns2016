@@ -5,12 +5,48 @@
 
 #reading data
 
-jejen <- read.table("20161005_data_volcanic_Jejen.csv", 
-                    header=TRUE,
-                    sep=",",) 
+df <- read.csv("20161005_data_volcanic_Jejen.csv") 
 
+row.names(df) <- df$Kode # setting row names
+
+df2 <- df[4:8] # exclude Location name
 install.packages("tidyverse")
 library("tidyverse")
+
+install.packages("ggcorrplot")
+library('ggcorrplot')
+
+install.packages('cluster')
+library(cluster) # for cluster analysis
+
+install.packages('FactoMineR')
+library('FactoMineR')
+
+install.packages('factoextra')
+library('factoextra')
+
+install.packages('vegan')
+library(vegan)
+
+cor.tab <- cor(df2)
+cor.tab
+
+ggcorrplot(cor.tab)              # making heatmap
+
+## locating and imputing missing data
+install.packages('mice')
+library('mice')
+md.pattern(df2) # from package 'mice'
+df2 <- mice(df2,m=5,maxit=50,meth='pmm',seed=500)
+df2 <- as.data.frame(df2)
+  
+# Run PCA 
+res.pca <- PCA(df2, graph = FALSE)
+res.pca <- prcomp(df2, center = TRUE, scale = TRUE, na.action = na.omit)
+res.pca
+fviz_pca(res.pca, choix = "var", col.var="contrib", jitter=list(what = "label", width =NULL, height = NULL))
+
+fviz_pca(res.pca, choix = "var", col.var="contrib", repel=TRUE)
 
 ################# old lines ################
 
